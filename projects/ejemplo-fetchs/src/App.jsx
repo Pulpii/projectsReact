@@ -1,30 +1,25 @@
-import { useState } from 'react'
+import './App.css'
 import { ImageCat } from './components/ImageCat'
+import { useCatImage } from './hooks/useCatImage.js'
+import { useCatFact } from './hooks/useCatFact.js'
 
-export function AppGatitos () {
-  const [cats, setCats] = useState([])
+export function App() {
+  const { fact, refreshFact } = useCatFact()
+  const { imageUrl } = useCatImage({ fact })
 
-  //   const [cats1, setCats1] = useState([<ImageCat key={1} />, <ImageCat key={2} />])
-
-  //   const addNewRandomCat = () => {
-  //     setCats([...cats, <ImageCat />])
-  //   }
+  const handleClick = async () => {
+    refreshFact()
+  }
 
   return (
     <main>
-      <h1>App de Gatitos</h1>
-      {/* <button onClick={addNewRandomCat}>MIAU</button> */}
+      <h1>App de gatitos</h1>
 
-      <section>
-        <ImageCat />
-        {/* {cats1.map((cat, index) => {
-          return (
-            <div key={index}>
-              {cat}
-            </div>
-          )
-        })} */}
-      </section>
+      <button onClick={handleClick}>Get new fact</button>
+
+      {fact && <p>{fact}</p>}
+      {imageUrl && <img src={imageUrl} alt={`Image extracted using the first three words for ${fact}`} />}
+      {/* <ImageCat /> */}
     </main>
   )
 }

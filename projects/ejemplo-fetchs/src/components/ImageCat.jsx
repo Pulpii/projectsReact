@@ -1,14 +1,7 @@
 import { useCatImage } from '../hooks/useCatImage'
-import { useEffect } from 'react'
-import { useCatFact } from '../hooks/useCatFact'
 
 export function ImageCat () {
-  const [fact, getFactAndUpdateState] = useCatFact()
-  const [imageUrl] = useCatImage({ fact })
-
-  useEffect(() => {
-    getFactAndUpdateState()
-  }, [])
+  const [imageUrl] = useCatImage({ fact: 'cat' })
 
   return (
     <>

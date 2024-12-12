@@ -4,12 +4,11 @@ import { getRandomFact } from '../services/facts'
 export function useCatFact () {
   const [fact, setFact] = useState()
 
-  const getFactAndUpdateState = () => {
-    const newFact = getRandomFact()
-    return setFact(newFact)
+  const refreshFact = () => {
+    getRandomFact().then(newFact => setFact(newFact))
   }
 
-  useEffect(getFactAndUpdateState, [])
+  useEffect(refreshFact, [])
 
-  return { fact, getFactAndUpdateState }
+  return { fact, refreshFact }
 }

@@ -1,25 +1,21 @@
 import { useState, useEffect } from 'react'
 
-export function useCatImage ({ fact }) {
-  const CAT_PREFIX_URL = 'https://cataas.com/cat/says/'
+const CAT_PREFIX_IMAGE_URL = 'https://cataas.com'
 
+export function useCatImage ({ fact }) {
   const [imageUrl, setImageUrl] = useState()
 
   useEffect(() => {
     if (!fact) return
-    const firstWord = fact.split(' ')[0]
-    fetch(`${CAT_PREFIX_URL}${firstWord}?fontSize=50&fontColor=red&json=true`)
-      .then(res => {
-        if (!res.ok) {
-          throw new Error('Error en la request')
-        }
-        res.json()
-      })
+    const firstThreeWord = fact.split(' ', 3).join(' ')
+    fetch(`${CAT_PREFIX_IMAGE_URL + '/cat/says/'}${firstThreeWord}?fontSize=50&fontColor=green&json=true`)
+      .then(res => res.json())
       .then(data => {
-        const { url } = data
+        const { _id } = data
+        const url = `/cat/${_id}/says/${firstThreeWord}`
         setImageUrl(url)
       })
   }, [fact])
 
-  return { imageUrl: `${CAT_PREFIX_URL}${imageUrl}` }
+  return { imageUrl: `${CAT_PREFIX_IMAGE_URL}${imageUrl}` }
 }
