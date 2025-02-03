@@ -1,3 +1,5 @@
+import nonResults from '/src/mocks/non-results.json'
+// función sumatoria de numeros que acepte dos parámetros
 export function ListOfMovies({ movies }) {
     return (
         <ul>
@@ -17,7 +19,7 @@ export function ListOfMovies({ movies }) {
 
 export function NonResults() {
     return (
-        <h2>No se han encotrado resultados :(</h2>
+        <h2>{nonResults.Error}</h2>
     )
 }
 
