@@ -1,53 +1,62 @@
-import { useEffect, useRef, useState } from 'react'
 import { Movies } from './components/Movies'
 import { useMovies } from './hooks/useMovies'
-import { QueryErrorHandler } from './components/QueryErrorHandler'
+import { useSearch } from './hooks/useSearch'
 import "./App.css"
+import { useCallback, useState } from 'react'
+import debounce from "just-debounce-it"
 
 function App() {
-  const API = "https://www.omdbapi.com/?apiKey=4287ad07&"
-  const { movies } = useMovies()
-  const [query, setQuery] = useState('')
-  const [error, setError] = useState(null)
-  const queryErrorHandlerRef = useRef(null)
+  const [ sort, setSort] = useState(false)
+  const { search, updateSearch, errorSearch } = useSearch()
+  const { sortedMovies, getMovies, loading, errorMovies } = useMovies({ search, sort })
 
+  const debounceGetMovies = useCallback(
+    debounce(search => {
+      getMovies({ search });
+    }, 300, true),
+    []
+  );
+ 
+    
   const handleSubmit = (event) => {
     event.preventDefault()
-    console.log(query)
+    getMovies({search})
   }
+  
+    const handleSort = () => {
+      setSort(!sort)
+    }
 
   const handleChangeQuery = (event) => {
-    setQuery(event.target.value)
+    if (event.target.value.startsWith(' ')) return
+    updateSearch(event.target.value)
+    debounceGetMovies(event.target.value)
   }
-
-  useEffect(() => {
-    if (!queryErrorHandlerRef.current) {
-      queryErrorHandlerRef.current = new QueryErrorHandler()
-    }
-    queryErrorHandlerRef.current.query = query
-    queryErrorHandlerRef.current.checkQuery()
-    if (queryErrorHandlerRef.current._error) {
-      setError(queryErrorHandlerRef.current._message)
-    } else {
-      setError(null)
-    }
-  }, [query])
 
   return (
     <div className='page'>
       <header>
         <h1>Buscador de Pelis</h1>
         <form className='form' onSubmit={handleSubmit}>
-          <input name='query' value={query} onChange={handleChangeQuery} type="text" placeholder='Avangers, Star Wars...' />
+          <input name='query' value={search} onChange={handleChangeQuery} type="text" placeholder='Avangers, Star Wars...' />
+          <input type="checkbox" onChange={handleSort} checked={sort} />
           <button type='submit'>Buscar</button>
         </form>
 
-        {error && <p style={{ color: 'red' }} className='error'>{error}</p>}
+        {errorSearch && <p className='error'>{errorSearch}</p>}
       </header>
 
       <main>
         {
-          <Movies movies={movies} />
+          <Movies movies={sortedMovies} />
+        }
+        {
+          loading && (
+            <img src="src\assets\tube-spinner.png" alt="loading-icon" className='loader' />
+          )
+        }
+        {
+          errorMovies && <p style={{ color: 'red' }} className='error'>{errorMovies}</p>
         }
       </main>
     </div>

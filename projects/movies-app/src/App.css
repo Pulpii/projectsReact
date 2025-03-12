@@ -1,17 +1,56 @@
-.page{
+.page {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    width: 100%;
 }
 
-main{
-    display: flex;
-    justify-content: center;
+main {
+    width: 100%;
+    text-align: center;
 }
 
-form{
+form {
     display: flex;
     align-items: center;
     justify-content: center;
 }
+
+.movies {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.movie {
+    text-align: center;
+}
+
+.movie img {
+    border-radius: 10px;
+}
+
+.error {
+    color: red;
+}
+
+.loader {
+    width: 80px; /* Ajusta el tamaño del icono */
+    height: 80px;
+    animation: girar 2s linear infinite; /* Animación */
+    position: absolute; /* Para centrarlo */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Centrarlo */
+  }
+  
+  @keyframes girar {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  

@@ -3,7 +3,7 @@ import { ImageCat } from './components/ImageCat'
 import { useCatImage } from './hooks/useCatImage.js'
 import { useCatFact } from './hooks/useCatFact.js'
 
-export function App() {
+export function App () {
   const { fact, refreshFact } = useCatFact()
   const { imageUrl } = useCatImage({ fact })
 
